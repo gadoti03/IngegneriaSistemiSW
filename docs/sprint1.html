@@ -28,19 +28,19 @@
                 </section>
 
                 <section class="mb-4">
-                    <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Functional Requirements</h2>
+                    <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Requirements</h2>
                     <div class="bg-body-tertiary border rounded p-3 mb-0">
                         <ul>
-                            <li>R1: Implementare in Java una versione del gioco Game of Life di Conway, inteso come zero-player game.
-                            Il sistema deve modellare una Griglia composta da Celle il cui stato (viva o morta)
-                            cambia nel tempo secondo le regole definite dal Game of Life.</li>
-                            <li>R2: L’utente deve poter:
+                            <li>R1: Sviluppare in Java una versione del gioco Life di Conway, concepita come zero-player game.
+                            Il sistema deve prevedere una Griglia di Celle il cui stato (cella "viva" o cella "morta")
+                            cambia nel tempo secondo le regole definite dal ConwayLife</li>
+                            <li>R2: L'utente deve poter:
                                 <ul>
-                                    <li>definire la configurazione iniziale della griglia</li>
-                                    <li>osservare l’evoluzione temporale del gioco tramite una rappresentazione adeguata
-                                    (si veda <a href="https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf#section.6.3">Problema della rappresentazione del gioco</a>)</li>
-                                    <li>mettere in pausa e riavviare l’esecuzione</li>
-                                    <li>azzerare la griglia quando il gioco è in stato di pausa</li>
+                                    <li>definire la configurazione iniziale della griglia di gioco</li>
+                                    <li>osservare l'evoluzione del gioco in una modalità adeguata
+                                    (si veda <a href="https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf#section.6.3">Problema della vista del gioco</a>)</li>
+                                    <li>interrompere e riavviare l'evoluzione del gioco</li>
+                                    <li>azzerare (quando il gioco è fermo) la configurazione corrente della griglia</li>
                                 </ul>
                             </li>
                         </ul>
@@ -48,38 +48,37 @@
                 </section>
 
                 <section class="mb-3">
-                    <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Analisi dei Requisiti</h2>
+                    <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Requirement analysis
+                    </h2>
                     <div class="bg-body-tertiary border rounded p-3 mb-0">
                         <ul>
-                            <li>Che cosa si intende per "Cella"?</li>
-                            <li>interface ICell - Componente caratterizzato da uno stato booleano (vivo/morto).
+                            <li>Cosa si intende per "Cella"?</li>
+                            <li>interface ICell - Entità che possiede uno stato binario: vivo o morto.
                                 <ul>
-                                    <li>void setStatus(boolean alive) - Imposta direttamente lo stato della cella.</li>
-                                    <li>boolean isAlive() - Restituisce true se la cella è viva, false altrimenti.</li>
-                                    <li>void toggleState() - Cambia lo stato corrente della cella (viva ↔ morta).</li>
+                                    <li>void setStatus(boolean alive) - Imposta esplicitamente lo stato della cella.</li>
+                                    <li>boolean isAlive() - Restituisce true se la cella è viva, false in caso contrario.</li>
+                                    <li>void switchCellState() - Alterna lo stato attuale della cella (viva ↔ morta).</li>
                                 </ul>
                             </li>
-
-                            <li>Che cosa si intende per "Griglia"?</li>
-                            <li>interface IGrid - Struttura bidimensionale ordinata che contiene celle e fornisce operazioni di gestione.
+                            <li>Cosa si intende per "Griglia"?</li>
+                            <li>interface IGrid - Entità che rappresenta una struttura bidimensionale ordinata di celle e gestisce le operazioni su di esse.
                                 <ul>
-                                    <li>int getRows() - Fornisce il numero totale di righe.</li>
-                                    <li>int getCols() - Fornisce il numero totale di colonne.</li>
-                                    <li>boolean isAlive(int row, int col) - Indica se la cella in posizione (row, col) è viva.</li>
-                                    <li>void setStatus(int row, int col, boolean status) - Modifica lo stato della cella indicata.</li>
-                                    <li>int countAliveNeighbors(int row, int col) - Calcola il numero di celle vive adiacenti alla posizione data.</li>
-                                    <li>ICell getCell(int row, int col) - Restituisce la cella corrispondente alla posizione specificata.</li>
+                                    <li>int getRows() - Restituisce il numero totale di righe della griglia.</li>
+                                    <li>int getCols() - Restituisce il numero totale di colonne della griglia.</li>
+                                    <li>boolean isAlive(int row, int col) - Verifica se la cella nella posizione (row, col) è viva.</li>
+                                    <li>void setStatus(int row, int col, boolean status) - Modifica lo stato della cella nella posizione (row, col).</li>
+                                    <li>int countNeighborsLive(int row, int col) - Calcola il numero di celle adiacenti vive rispetto alla posizione (row, col).</li>
+                                    <li>ICell getCell(int row, int col) - Restituisce il riferimento alla cella situata in (row, col).</li>
                                 </ul>
                             </li>
-
-                            <li>Che cosa si intende per "Game of Life"?</li>
-                            <li>interface ILife - Componente responsabile della gestione dell’evoluzione applicando le regole del gioco.
+                            <li>Cosa si intende per "Gioco Life di Conway"?</li>
+                            <li>interface ILife - Entità responsabile della gestione dell'evoluzione del gioco applicando le regole di Conway.
                                 <ul>
-                                    <li>void computeNextGeneration() - Determina e applica la generazione successiva.</li>
-                                    <li>boolean isAlive(int row, int col) - Restituisce lo stato della cella indicata.</li>
-                                    <li>void setCell(int row, int col, boolean alive) - Definisce lo stato iniziale o corrente di una cella.</li>
-                                    <li>int getRows() - Restituisce il numero di righe della griglia associata.</li>
-                                    <li>int getCols() - Restituisce il numero di colonne della griglia associata.</li>
+                                    <li>void nextGeneration() - Determina e applica lo stato della generazione successiva.</li>
+                                    <li>boolean isAlive(int row, int col) - Controlla lo stato della cella nella posizione (row, col).</li>
+                                    <li>void setCell(int row, int col, boolean alive) - Imposta lo stato iniziale o attuale di una cella.</li>
+                                    <li>int getRows() - Restituisce il numero di righe della griglia gestita.</li>
+                                    <li>int getCols() - Restituisce il numero di colonne della griglia gestita.</li>
                                 </ul>
                             </li>
                         </ul>
