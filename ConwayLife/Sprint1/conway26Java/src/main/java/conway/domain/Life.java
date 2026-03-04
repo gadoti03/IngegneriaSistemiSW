@@ -15,7 +15,7 @@ public class Life implements LifeInterface{
     private IGrid gridA;
     private IGrid gridB;
     
- // Un riferimento che punta sempre alla griglia che contiene lo stato attuale
+    // Un riferimento che punta sempre alla griglia che contiene lo stato attuale
     private IGrid currentGrid;
     private IGrid nextGrid;
     

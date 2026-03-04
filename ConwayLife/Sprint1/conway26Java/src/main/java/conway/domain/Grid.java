@@ -48,8 +48,7 @@ public class Grid implements IGrid{
                 int neighborRow = row + i;
                 int neighborCol = col + j;
                 
-                if (neighborRow >= 0 && neighborRow < rows && 
-                    neighborCol >= 0 && neighborCol < cols) {
+                if (neighborRow >= 0 && neighborRow < rows && neighborCol >= 0 && neighborCol < cols) {
                     
                     if (getCell(neighborRow,neighborCol).isAlive()) {
                         count++;
