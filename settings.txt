@@ -1,3 +1,0 @@
-1) clona repo
-2) su eclipse, importa <from gradle> issLab2026/ConwayLife/Sprint1/conway26Java
-3) da terminale, gradle w eclipse
