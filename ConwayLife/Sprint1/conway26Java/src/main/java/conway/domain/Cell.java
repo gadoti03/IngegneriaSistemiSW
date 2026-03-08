@@ -19,5 +19,4 @@ public class Cell implements ICell {
 		this.status = !this.status;
 	}
 
-	
 }
