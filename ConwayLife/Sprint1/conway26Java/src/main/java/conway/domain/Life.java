@@ -5,90 +5,66 @@ import java.util.stream.Collectors;
 public class Life implements LifeInterface{
 	
 	public static LifeInterface CreateLife(int nr, int nc) {
-	   return new Life(nr,nc);   
-   }
+	   return new Life(nr,nc);  
+	   // nr and nc can be read from a configuration file
+	}
 	
+	// Rows and Columns
 	private final int rows;
     private final int cols;
     
-    // Due matrici distinte
-    private IGrid gridA;
-    private IGrid gridB;
     
-    // Un riferimento che punta sempre alla griglia che contiene lo stato attuale
+    // References that point to the grids containing the current and next state
     private IGrid currentGrid;
     private IGrid nextGrid;
     
-   public static LifeInterface CreateGameRules() {
-	   return new Life(5, 5); 
+    /*
+    public static LifeInterface CreateGameRules() {
+    	return new Life(5, 5); 
 	   // Dimensioni di default, possono essere 
 	   //lette da un file di configurazione o passate come parametri
-   }
+    }
+    */
 
-    // Costruttore che crea una griglia vuota di dimensioni specifiche
     public Life(int rows, int cols) {
     	this.rows = rows;
     	this.cols = cols;
-        this.gridA = new Grid(rows, cols);
-        this.gridB = new Grid(rows, cols);
-        this.currentGrid = this.gridA;
-        this.nextGrid = this.gridB;
+        this.currentGrid = new Grid(rows, cols);
+        this.nextGrid = new Grid(rows, cols);
     }
 
-    // Calcola la generazione successiva applicando le 4 regole di Conway
+    @Override
     public void nextGeneration() {
-    	// Applichiamo le regole leggendo da currentGrid e scrivendo in nextGrid
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                int neighbors = currentGrid.countNeighborsLive(r, c);
-                boolean isAlive = currentGrid.isAlive(r, c);
-                //apply rules
-                if (isAlive) {
-                    nextGrid.setStatus(r, c, neighbors == 2 || neighbors == 3);
-                } else {
-                    nextGrid.setStatus(r, c, neighbors == 3);
-                }
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                int neighbors = this.currentGrid.countNeighbors(row,col); 
+            	// Apply the rules reading from currentGrid, writign in nextGrid
+                applyLifeRules(row, col, neighbors);
             }
         }
-
-        // --- IL PING-PONG ---
-        // Scambiamo i riferimenti: ciò che era 'next' diventa 'current'
-        IGrid temp = currentGrid;
-        currentGrid      = nextGrid;
-        nextGrid         = temp;
-        // Nota: non abbiamo creato nuovi oggetti, abbiamo solo spostato i puntatori
+        swapGrids();
+    }
+    
+    protected void applyLifeRules(int row, int col, int neighbors) {
+        boolean nextStatus;
+        boolean isAlive = this.currentGrid.isCellAlive(row, col);
+        //apply Life rules
+        if (isAlive) {
+        	nextStatus =  (neighbors == 2 || neighbors == 3);                
+        } else {
+        	nextStatus = neighbors == 3;           
+        }
+        this.nextGrid.setCellState(row, col, nextStatus);
     }
 
 	@Override
-	public boolean isAlive(int row, int col) {
-		return this.currentGrid.isAlive(row, col);
+	public boolean isCellAlive(int row, int col) {
+		return this.currentGrid.isCellAlive(row, col);
 	}
 
 	@Override
-	public int getRows() {
- 		return this.currentGrid.getRows();
-	}
-
-	@Override
-	public int getCols() {
- 		return this.currentGrid.getCols();
-	}
-
-	@Override
-	public String gridRep() {
-		String str = "";
-		for (int i=0; i<rows; i++) {
-			for (int j=0; j<cols; j++) {
-				str+=this.currentGrid.isAlive(i, j)?"1":"0";
-			}
-			str+="\n";
-		}
-		return str;
-	}
-
-	@Override
-	public void setCell(int row, int col, boolean alive) {
-		this.currentGrid.setStatus(row, col, alive);
+	public void setCellState(int row, int col, boolean alive) {
+		this.currentGrid.setCellState(row, col, alive);
 	}
 
 	@Override
@@ -100,16 +76,16 @@ public class Life implements LifeInterface{
 	public IGrid getGrid() {
 		return this.currentGrid;
 	}
+	
+	protected void swapGrids() {
+        IGrid temp = currentGrid;
+        currentGrid = nextGrid;
+        nextGrid = temp;
+	}
 
 	@Override
 	public void resetGrids() {
-		this.gridA = new Grid(rows, cols);
-		this.gridB = new Grid(rows, cols);
-		this.currentGrid = this.gridA;
-		this.nextGrid = this.gridB;
-	}
-	
-	
-	
-	
+		currentGrid.reset();
+		nextGrid.reset();
+	}	
 }

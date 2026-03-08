@@ -7,5 +7,4 @@ public interface IOutDev {
 	public void displayCell(IGrid grid, int x, int y); 
 	public void close();
 	public void displayGrid(IGrid grid);
-
 }

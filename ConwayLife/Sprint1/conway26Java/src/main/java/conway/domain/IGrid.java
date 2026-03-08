@@ -17,6 +17,9 @@ public interface IGrid {
     /* Sets the state of the cell at the given position */
     void setCellState(int row, int column, boolean alive);
     
+    /* Return the number of adjacent live cells */
+    int countNeighbors(int row, int colums);
+    
     /* Set the grid ad the initial state */
     void reset();
 }

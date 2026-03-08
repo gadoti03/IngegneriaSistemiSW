@@ -9,10 +9,10 @@ import unibo.basicomm23.utils.CommUtils;
 
 public class LifeController implements GameController {
     private int generationTime = 500;
-    private  LifeInterface life;
-    private  IOutDev outdev; 
+    private LifeInterface life;
+    private IOutDev outdev; 
  	protected boolean running = false;
-    protected int epoch       = 0;
+    protected int epoch = 0;
 
     
     public LifeController( LifeInterface game, IOutDev outdev ){  
@@ -27,9 +27,9 @@ public class LifeController implements GameController {
     	return generationTime;
     }
  
-/*
- * Funzioni di controllo del gioco
- */
+	/*
+	 * Game control functions
+	 */
 	@Override
 	public void switchCellState(int x, int y) {
 		ICell c = life.getCell(x, y); 

@@ -1,25 +1,22 @@
 package main.java.conway.domain;
 
 public interface LifeInterface {
-	/** Calcola l'evoluzione dello stato alla generazione successiva */
+
+    /* Computes the next generation of the grid */
     void nextGeneration();
 
-    /** Restituisce lo stato di una cella specifica */
-    boolean isAlive(int row, int col);
+    /* Returns true if the cell at the given row and column is alive */
+    boolean isCellAlive(int row, int col);
 
-    /** Imposta lo stato di una cella */
-    void setCell(int row, int col, boolean alive);
+    /* Sets the state of the cell at the given row and column */
+    void setCellState(int row, int col, boolean alive);
 
-    /** Restituisce il numero di righe e colonne */
-    int getRows();
-    int getCols();
-    
-    /** Restituisce una rappresentazione grafica testuale della grglia*/
-    public String gridRep( );
-    
-    public ICell getCell(int row, int col);
-    
-    public IGrid getGrid();
-    
-    public void resetGrids();
+    /* Returns the cell at the given row and column */
+    ICell getCell(int x, int y);
+
+    /* Returns the grid */
+    IGrid getGrid();
+
+    /* Resets the grid */
+    void resetGrids();
 }
