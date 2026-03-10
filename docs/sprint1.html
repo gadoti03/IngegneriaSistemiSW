@@ -56,37 +56,45 @@
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Requirement analysis</h2>
                     <div class="bg-body-tertiary border rounded p-3 mb-0">
 
-                        <h5>Cosa si intende per "Cella"?</h5>
-                        <pre class="bg-light p-2 border rounded"><code>
+                        <h5 class="mt-2">Cosa si intende per <b>Cella</b>?</h5>
+                        <p>Dopo aver parlato col committente formalizzo il seguente modello:</p>
+                        <pre class="bg-light p-3 border rounded"><code>
 public interface ICell {
-    void setStatus(boolean alive);   // Imposta lo stato della cella
-    boolean isAlive();               // Restituisce true se la cella è viva
-    void switchCellState();          // Inverte lo stato della cella
+    /* Una cella ha la capacità di impostare il proprio stato interno a seconda di un valore booleano */
+    void setStatus(boolean v);
+
+    /* Una cella, come entità, ha la capacità di rispondere alla "query" isAlive rispondendo con il valore dello stato */
+    boolean isAlive();
+
+    /* Una cella ha la capacità di cambiare il proprio stato da viva a morta e da morta a viva */
+    void switchCellState(); 
 }
                         </code></pre>
 
-                        <h5>Cosa si intende per "Griglia"?</h5>
-                        <pre class="bg-light p-2 border rounded"><code>
+                        <h5 class="mt-3">Cosa si intende per <b>Griglia</b>?</h5>
+                        <p>Dopo aver parlato col committente formalizzo il seguente modello:</p>
+                        <pre class="bg-light p-3 border rounded"><code>
 public interface IGrid {
-    int getRows();                              // Numero di righe
-    int getCols();                              // Numero di colonne
-    ICell getCell(int row, int col);           // Restituisce la cella specifica
-    boolean isCellAlive(int row, int col);     // Stato della cella
-    void setCellState(int row, int col, boolean alive); // Imposta lo stato della cella
-    int countNeighbors(int row, int col);      // Numero di celle vicine vive
-    void reset();                               // Reset della griglia
+    int getRows();
+    int getCols();
+    ICell getCell(int row, int col);
+    boolean isCellAlive(int row, int col);
+    void setCellState(int row, int col, boolean alive);
+    int countNeighbors(int row, int col);
+    void reset();
 }
                         </code></pre>
 
-                        <h5>Cosa si intende per "Life"?</h5>
-                        <pre class="bg-light p-2 border rounded"><code>
+                        <h5 class="mt-3">Cosa si intende per <b>Life</b>?</h5>
+                        <p>Dopo aver parlato col committente formalizzo il seguente modello:</p>
+                        <pre class="bg-light p-3 border rounded"><code>
 public interface LifeInterface {
-    void nextGeneration();                         // Calcola la prossima generazione
-    boolean isCellAlive(int row, int col);        // Controlla se la cella è viva
-    void setCellState(int row, int col, boolean alive); // Imposta lo stato della cella
-    ICell getCell(int row, int col);              // Restituisce la cella
-    IGrid getGrid();                               // Restituisce la griglia
-    void resetGrids();                             // Resetta la griglia
+    void nextGeneration();
+    boolean isCellAlive(int row, int col);
+    void setCellState(int row, int col, boolean alive);
+    ICell getCell(int row, int col);
+    IGrid getGrid();
+    void resetGrids();
 }
                         </code></pre>
 
