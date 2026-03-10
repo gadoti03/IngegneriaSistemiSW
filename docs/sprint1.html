@@ -17,98 +17,108 @@
 
         <main class="card shadow-sm">
             <div class="card-body">
+
+                <!-- Introduction -->
                 <section class="mb-4">
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Introduction</h2>
                     <p class="mb-0">
                         Realizzazione in Java del
                         <a href="https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf#chapter.6">
                             GAME OF LIFE DI CONWAY
-                        </a>
+                        </a>, limitatamente al <b>requisito R1</b>.
                     </p>
                 </section>
 
+                <!-- Requirements -->
                 <section class="mb-4">
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Requirements</h2>
                     <div class="bg-body-tertiary border rounded p-3 mb-0">
                         <ul>
-                            <li>R1: Sviluppare in Java una versione del gioco Life di Conway, concepita come zero-player game.
-                            Il sistema deve prevedere una Griglia di Celle il cui stato (cella "viva" o cella "morta")
-                            cambia nel tempo secondo le regole definite dal ConwayLife</li>
+                            <li>R1: Sviluppare in Java il gioco Life di Conway come zero-player game.
+                                La griglia di celle evolve secondo le regole del gioco.</li>
                             <li>R2: L'utente deve poter:
                                 <ul>
-                                    <li>definire la configurazione iniziale della griglia di gioco</li>
-                                    <li>osservare l'evoluzione del gioco in una modalità adeguata
-                                    (si veda <a href="https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf#section.6.3">Problema della vista del gioco</a>)</li>
-                                    <li>interrompere e riavviare l'evoluzione del gioco</li>
-                                    <li>azzerare (quando il gioco è fermo) la configurazione corrente della griglia</li>
+                                    <li>definire la configurazione iniziale della griglia</li>
+                                    <li>osservare l'evoluzione del gioco
+                                        (<a href="https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf#section.6.3">
+                                            vista del gioco
+                                        </a>)</li>
+                                    <li>interrompere e riprendere l'evoluzione</li>
+                                    <li>resettare la griglia quando il gioco è fermo</li>
                                 </ul>
                             </li>
                         </ul>
                     </div>
                 </section>
 
-                <section class="mb-3">
-                    <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Requirement analysis
-                    </h2>
+                <!-- Requirement Analysis -->
+                <section class="mb-4">
+                    <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Requirement analysis</h2>
                     <div class="bg-body-tertiary border rounded p-3 mb-0">
-                        <ul>
-                            <li>Cosa si intende per "Cella"?</li>
-                            <li>interface ICell - Entità che possiede uno stato binario: vivo o morto.
-                                <ul>
-                                    <li>void setStatus(boolean alive) - Imposta esplicitamente lo stato della cella.</li>
-                                    <li>boolean isAlive() - Restituisce true se la cella è viva, false in caso contrario.</li>
-                                    <li>void switchCellState() - Alterna lo stato attuale della cella (viva ↔ morta).</li>
-                                </ul>
-                            </li>
-                            <li>Cosa si intende per "Griglia"?</li>
-                            <li>interface IGrid - Entità che rappresenta una struttura bidimensionale ordinata di celle e gestisce le operazioni su di esse.
-                                <ul>
-                                    <li>int getRows() - Restituisce il numero totale di righe della griglia.</li>
-                                    <li>int getCols() - Restituisce il numero totale di colonne della griglia.</li>
-                                    <li>boolean isAlive(int row, int col) - Verifica se la cella nella posizione (row, col) è viva.</li>
-                                    <li>void setStatus(int row, int col, boolean status) - Modifica lo stato della cella nella posizione (row, col).</li>
-                                    <li>int countNeighborsLive(int row, int col) - Calcola il numero di celle adiacenti vive rispetto alla posizione (row, col).</li>
-                                    <li>ICell getCell(int row, int col) - Restituisce il riferimento alla cella situata in (row, col).</li>
-                                </ul>
-                            </li>
-                            <li>Cosa si intende per "Gioco Life di Conway"?</li>
-                            <li>interface ILife - Entità responsabile della gestione dell'evoluzione del gioco applicando le regole di Conway.
-                                <ul>
-                                    <li>void nextGeneration() - Determina e applica lo stato della generazione successiva.</li>
-                                    <li>boolean isAlive(int row, int col) - Controlla lo stato della cella nella posizione (row, col).</li>
-                                    <li>void setCell(int row, int col, boolean alive) - Imposta lo stato iniziale o attuale di una cella.</li>
-                                    <li>int getRows() - Restituisce il numero di righe della griglia gestita.</li>
-                                    <li>int getCols() - Restituisce il numero di colonne della griglia gestita.</li>
-                                </ul>
-                            </li>
-                        </ul>
+
+                        <h5>Cosa si intende per "Cella"?</h5>
+                        <pre class="bg-light p-2 border rounded"><code>
+public interface ICell {
+    void setStatus(boolean alive);   // Imposta lo stato della cella
+    boolean isAlive();               // Restituisce true se la cella è viva
+    void switchCellState();          // Inverte lo stato della cella
+}
+                        </code></pre>
+
+                        <h5>Cosa si intende per "Griglia"?</h5>
+                        <pre class="bg-light p-2 border rounded"><code>
+public interface IGrid {
+    int getRows();                              // Numero di righe
+    int getCols();                              // Numero di colonne
+    ICell getCell(int row, int col);           // Restituisce la cella specifica
+    boolean isCellAlive(int row, int col);     // Stato della cella
+    void setCellState(int row, int col, boolean alive); // Imposta lo stato della cella
+    int countNeighbors(int row, int col);      // Numero di celle vicine vive
+    void reset();                               // Reset della griglia
+}
+                        </code></pre>
+
+                        <h5>Cosa si intende per "Life"?</h5>
+                        <pre class="bg-light p-2 border rounded"><code>
+public interface LifeInterface {
+    void nextGeneration();                         // Calcola la prossima generazione
+    boolean isCellAlive(int row, int col);        // Controlla se la cella è viva
+    void setCellState(int row, int col, boolean alive); // Imposta lo stato della cella
+    ICell getCell(int row, int col);              // Restituisce la cella
+    IGrid getGrid();                               // Restituisce la griglia
+    void resetGrids();                             // Resetta la griglia
+}
+                        </code></pre>
+
                     </div>
                 </section>
 
-                <section class="mb-3">
+                <!-- Problem analysis -->
+                <section class="mb-4">
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Problem analysis</h2>
                     <img src="./img/problem_analysis.jpeg" alt="Problem analysis" class="img-fluid border rounded">
                 </section>
 
-                <section class="mb-3">
+                <!-- Test plans -->
+                <section class="mb-4">
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Test plans</h2>
+                    <p>Da definire (puoi inserire qui i test per ICell, IGrid e LifeInterface)</p>
                 </section>
 
+                <!-- Project / Testing / Deployment / Maintenance -->
                 <section class="mb-3">
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Project</h2>
                 </section>
-
                 <section class="mb-3">
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Testing</h2>
                 </section>
-
                 <section class="mb-3">
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Deployment</h2>
                 </section>
-
                 <section class="mb-0">
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Maintenance</h2>
                 </section>
+
             </div>
         </main>
 
@@ -117,16 +127,15 @@
                 class="bg-primary-subtle text-success rounded p-3 d-flex align-items-center justify-content-between flex-wrap gap-3">
                 <div>
                     <p class="mb-1">By Gabriele Doti</p>
-                    <p class="mb-1">email: <a
-                            href="mailto:gabriele.doti@studio.unibo.it">gabriele.doti@studio.unibo.it</a></p>
-                    <p class="mb-0">GIT repo: <a
-                            href="https://github.com/gadoti03/IngegneriaSistemiSW">https://github.com/gadoti03/IngegneriaSistemiSW</a></p>
+                    <p class="mb-1">email: <a href="mailto:gabriele.doti@studio.unibo.it">gabriele.doti@studio.unibo.it</a></p>
+                    <p class="mb-0">GIT repo: <a href="https://github.com/gadoti03/IngegneriaSistemiSW">https://github.com/gadoti03/IngegneriaSistemiSW</a></p>
                 </div>
                 <img src="./img/profile.png" alt="Gabriele Doti" class="img-thumbnail"
                     style="max-width: 96px; height: auto;">
             </div>
         </footer>
     </div>
-</body>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
