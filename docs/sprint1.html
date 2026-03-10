@@ -75,12 +75,25 @@ public interface ICell {
                         <p>Dopo aver parlato col committente formalizzo il seguente modello:</p>
                         <pre class="bg-light p-3 border rounded"><code>
 public interface IGrid {
+    /* Una griglia ha la capacità di comunicare il numero delle righe che la compongono */
     int getRows();
+
+    /* Una griglia ha la capacità di comunicare il numero delle colonne che la compongono */
     int getCols();
+
+    /* Una griglia ha la capacità di restituire la cella in corrispondenza degli indici di riga e colonna passati come parametri */
     ICell getCell(int row, int col);
+
+    /* Una griglia ha la capacità di rispondere alla query isCellAlive restituendo lo stato della cella corrispondente */
     boolean isCellAlive(int row, int col);
+
+    /* Una griglia ha la capacità di impostare lo stato di una cella a seconda degli indici di riga e colonna passati come parametri e di un valore booleano */
     void setCellState(int row, int col, boolean alive);
+
+    /* Una griglia ha la capacità di contare il numero di celle adiacenti vive rispetto alla cella specificata */
     int countNeighbors(int row, int col);
+
+    /* Una griglia ha la capacità di resettarsi riportando tutte le celle allo stato iniziale */
     void reset();
 }
                         </code></pre>
@@ -89,11 +102,22 @@ public interface IGrid {
                         <p>Dopo aver parlato col committente formalizzo il seguente modello:</p>
                         <pre class="bg-light p-3 border rounded"><code>
 public interface LifeInterface {
+    /* Life ha la capacità di calcolare il valore della sua griglia alla generazione successiva */
     void nextGeneration();
+
+    /* Life ha la capacità di restituire lo stato di una cella a seconda degli indici di riga e colonna passati come parametri */
     boolean isCellAlive(int row, int col);
+
+    /* Life ha la capacità di impostare lo stato di una cella a seconda degli indici di riga e colonna passati come parametri e di un valore booleano */
     void setCellState(int row, int col, boolean alive);
+
+    /* Life ha la capacità di restituire la cella in corrispondenza degli indici di riga e colonna passati come parametri */
     ICell getCell(int row, int col);
+
+    /* Life ha la capacità di restituire la griglia gestita dal modello */
     IGrid getGrid();
+
+    /* Life ha la capacità di resettare la griglia riportando tutte le celle allo stato iniziale */
     void resetGrids();
 }
                         </code></pre>
