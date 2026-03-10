@@ -134,7 +134,106 @@ public interface LifeInterface {
                 <!-- Test plans -->
                 <section class="mb-4">
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Test plans</h2>
-                    <p>Da definire</p>
+
+                    <!-- Piano di test per Cella -->
+                    <p>
+                        <a class="btn btn-outline-primary mb-2" data-bs-toggle="collapse" href="#cellTest" role="button" aria-expanded="false" aria-controls="cellTest">
+                            Piano di test per <b>Cella</b>
+                        </a>
+                    </p>
+                    <div class="collapse" id="cellTest">
+                        <div class="card card-body bg-body-tertiary">
+                <pre><code>
+                public class CellTest {
+                    private ICell c;
+
+                    @Before
+                    public void setup() {
+                        c = new Cell();
+                    }
+
+                    @Test
+                    public void testCellAlive() {
+                        c.setStatus(true);
+                        assertTrue(c.isAlive());
+                    }
+
+                    @Test
+                    public void testCellDead() {
+                        c.setStatus(false);
+                        assertFalse(c.isAlive());
+                    }
+                }
+                </code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Piano di test per Griglia -->
+                    <p>
+                        <a class="btn btn-outline-primary mb-2" data-bs-toggle="collapse" href="#gridTest" role="button" aria-expanded="false" aria-controls="gridTest">
+                            Piano di test per <b>Griglia</b>
+                        </a>
+                    </p>
+                    <div class="collapse" id="gridTest">
+                        <div class="card card-body bg-body-tertiary">
+                <pre><code>
+                public class GridTest {
+                    private IGrid grid;
+
+                    @Before
+                    public void setup() {
+                        grid = new Grid(5, 5);
+                    }
+
+                    @Test
+                    public void testDims() {
+                        assertEquals(5, grid.getRows());
+                        assertEquals(5, grid.getCols());
+                    }
+
+                    @Test
+                    public void testCellValue() {
+                        grid.setCellState(0, 0, true);
+                        assertTrue(grid.isCellAlive(0, 0));
+                    }
+                }
+                </code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Piano di test per Life -->
+                    <p>
+                        <a class="btn btn-outline-primary mb-2" data-bs-toggle="collapse" href="#lifeTest" role="button" aria-expanded="false" aria-controls="lifeTest">
+                            Piano di test per <b>Life</b>
+                        </a>
+                    </p>
+                    <div class="collapse" id="lifeTest">
+                        <div class="card card-body bg-body-tertiary">
+                <pre><code>
+                public class LifeTest {
+                    private LifeInterface lifeModel;
+
+                    @Before
+                    public void setup() {
+                        lifeModel = new Life(5, 5);
+                    }
+
+                    @Test
+                    public void testSetCellAlive() {
+                        lifeModel.setCellState(2, 3, true);
+                        assertTrue(lifeModel.isCellAlive(2, 3));
+                    }
+
+                    @Test
+                    public void testReset() {
+                        lifeModel.setCellState(2, 2, true);
+                        lifeModel.resetGrids();
+                        assertFalse(lifeModel.isCellAlive(2, 2));
+                    }
+                }
+                </code></pre>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Project / Testing / Deployment / Maintenance -->
