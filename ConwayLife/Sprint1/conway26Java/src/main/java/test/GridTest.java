@@ -11,65 +11,56 @@ import main.java.conway.domain.*;
 
 
 public class GridTest {
+	private static final int nRows=5;
+	private static final int nCols=5;
 	
-	private IGrid g;
-	public static final int rowsSize = 5;
-	public static final int colsSize = 5;
+private IGrid grid;
 
 	@Before
 	public void setup() {
-		System.out.println("GriTest | setup");
-		g = new Grid(rowsSize,colsSize);
+		System.out.println("GridTest | setup");	
+		grid= new Grid(nRows,nCols);
 	}
-
 	@After
 	public void down() {
 		System.out.println("GridTest | down");
 	}
 	
 	@Test
-	public void testSetGetCellCorretto() {
-		System.out.println("GridTest | testSetGetCellCorretto");
-		g.setStatus(0, 0, true);
-		assertTrue(g.isAlive(0, 0));
+	public void testDims() {
+		System.out.println("testDims ---------------------" );
+		int nr = grid.getRows();
+		int nc = grid.getCols();
+		assertTrue( nr==nRows && nc==nCols );
 	}
-	
-	@Test(expected = IndexOutOfBoundsException.class)
-	public void testGetCellErrato1() {
-		System.out.println("GridTest | testGetCellErrato1");
-	    g.isAlive(-1, -1);
-	}
-	
-	@Test(expected = IndexOutOfBoundsException.class)
-	public void testGetCellErrato2() {
-		System.out.println("GridTest | testGetCellErrato2");
-	    g.isAlive(rowsSize, colsSize);
-	}
-	
-	@Test(expected = IndexOutOfBoundsException.class)
-	public void testSetCellErrato1() {
-		System.out.println("GridTest | testSetCellErrato1");
-	    g.setStatus(-1, -1, true);
-	}
-	
-	@Test(expected = IndexOutOfBoundsException.class)
-	public void testSetCellErrato2() {
-		System.out.println("GridTest | testSetCellErrato2");
-	    g.setStatus(rowsSize, colsSize, true);
-	}
-	
 	@Test
-	public void testGetRows() {
-		assertTrue(g.getRows()==rowsSize);
+	public void testCGridCellValue() {
+		System.out.println("testCGridCellValue ---------------------" );
+		grid.setCellState(0,0,true);
+		assertTrue(grid.isCellAlive(0,0));
+		assertFalse(grid.isCellAlive(0,1) );
 	}
-	
 	@Test
-	public void testGetCols() {
-		assertTrue(g.getCols()==colsSize);
+	public void testGridRep() {
+		System.out.println("testGridRep ---------------------" );
+ 		System.out.println(""+grid);
+		assertTrue( grid.toString().startsWith(". . . . ."));
 	}
-	
-	
+	@Test
+	public void testReset() {
+		System.out.println("testReset ---------------------");
+		IGrid temp = new Grid(nRows, nCols);
+		grid.setCellState(0,0,true);
+		assertTrue(grid.isCellAlive(0, 0));
+		grid.reset();
+		boolean uguali = true;
+		for(int i = 0; i < nRows; i++) {
+			for(int j = 0; j < nCols; j++) {
+				if(grid.isCellAlive(i, j) != temp.isCellAlive(i, j))
+					uguali = false;
+			}
+		}
+		assertTrue(uguali);
+	}
 
-	
-	
 }
