@@ -135,22 +135,19 @@ public interface LifeInterface {
                 <section class="mb-4">
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Test plans</h2>
 
-<section class="mb-4">
-    <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Test plans</h2>
+                    <div class="accordion" id="testPlansAccordion">
 
-    <div class="accordion" id="testPlansAccordion">
-
-        <!-- Piano di test per Cella -->
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingCell">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#cellTest" aria-expanded="false" aria-controls="cellTest">
-                    Piano di test per <b>Cella</b>
-                </button>
-            </h2>
-            <div id="cellTest" class="accordion-collapse collapse" aria-labelledby="headingCell"
-                data-bs-parent="#testPlansAccordion">
-                <div class="accordion-body bg-body-tertiary p-2">
+                        <!-- Piano di test per Cella -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingCell">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#cellTest" aria-expanded="false" aria-controls="cellTest">
+                                    Piano di test per <b>Cella</b>
+                                </button>
+                            </h2>
+                            <div id="cellTest" class="accordion-collapse collapse" aria-labelledby="headingCell"
+                                data-bs-parent="#testPlansAccordion">
+                                <div class="accordion-body bg-body-tertiary p-2">
 <pre><code>
 public class CellTest {
     private ICell c;
@@ -173,21 +170,21 @@ public class CellTest {
     }
 }
 </code></pre>
-                </div>
-            </div>
-        </div>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Piano di test per Griglia -->
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingGrid">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#gridTest" aria-expanded="false" aria-controls="gridTest">
-                    Piano di test per <b>Griglia</b>
-                </button>
-            </h2>
-            <div id="gridTest" class="accordion-collapse collapse" aria-labelledby="headingGrid"
-                data-bs-parent="#testPlansAccordion">
-                <div class="accordion-body bg-body-tertiary p-2">
+                    <!-- Piano di test per Griglia -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingGrid">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#gridTest" aria-expanded="false" aria-controls="gridTest">
+                                Piano di test per <b>Griglia</b>
+                            </button>
+                        </h2>
+                        <div id="gridTest" class="accordion-collapse collapse" aria-labelledby="headingGrid"
+                            data-bs-parent="#testPlansAccordion">
+                            <div class="accordion-body bg-body-tertiary p-2">
 <pre><code>
 public class GridTest {
     private IGrid grid;
@@ -210,21 +207,21 @@ public class GridTest {
     }
 }
 </code></pre>
-                </div>
-            </div>
-        </div>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Piano di test per Life -->
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingLife">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#lifeTest" aria-expanded="false" aria-controls="lifeTest">
-                    Piano di test per <b>Life</b>
-                </button>
-            </h2>
-            <div id="lifeTest" class="accordion-collapse collapse" aria-labelledby="headingLife"
-                data-bs-parent="#testPlansAccordion">
-                <div class="accordion-body bg-body-tertiary p-2">
+                    <!-- Piano di test per Life -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingLife">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#lifeTest" aria-expanded="false" aria-controls="lifeTest">
+                                Piano di test per <b>Life</b>
+                            </button>
+                        </h2>
+                        <div id="lifeTest" class="accordion-collapse collapse" aria-labelledby="headingLife"
+                            data-bs-parent="#testPlansAccordion">
+                            <div class="accordion-body bg-body-tertiary p-2">
 <pre><code>
 public class LifeTest {
     private LifeInterface lifeModel;
@@ -248,12 +245,12 @@ public class LifeTest {
     }
 }
 </code></pre>
-                </div>
-            </div>
-        </div>
+                                </div>
+                            </div>
+                        </div>
 
-    </div>
-</section>
+                    </div>
+                </section>
 
                 <!-- Project / Testing / Deployment / Maintenance -->
                 <section class="mb-3">
