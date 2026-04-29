@@ -1,0 +1,116 @@
+System /* -trace */ firefly
+
+Dispatch cellstate : cellstate(X,Y,COLOR)     "commute cell state"
+Dispatch sync : sync(S)  
+//Event sync : sync(S) //Evento per sincronizzare
+
+Context ctxfirefly ip [ host="localhost"      port=8040 ] 
+Context ctxgrid    ip [ host="127.0.0.1"  port=8050 ]
+
+ExternalQActor griddisplay context ctxgrid
+
+QActor sync_actor context ctxfirefly {
+	[#
+	   var Timer_sync       = 10000L   
+	#]
+	State s0 initial {
+		println("$name | Sincronizzazione iniziata") color red	
+	}
+	Transition t0 
+		whenTimeVar Timer_sync -> send_sync
+	State send_sync{
+		forward  firefly1 -m sync : sync(1)
+		forward  firefly2 -m sync : sync(1)
+		forward  firefly3 -m sync : sync(1)	
+	}
+}
+ 
+QActor firefly1 context ctxfirefly  {     
+ 
+	[#   
+	   var  X          = 10
+	   var  Y          = 10
+	   var Timer       = 500L 
+ 	#] 
+	State s0 initial{
+		[# Timer = java.util.Random().nextLong(1000L,2000L )  #]  
+		println("$name | X=$X Y=$Y  Timer=$Timer") color magenta	
+	}
+	Goto flash
+	State flash{
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,1) 				
+ 		delay 500	
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,0) 				
+	}
+	Transition t0 
+		whenTimeVar Timer -> flash
+		whenMsg sync -> sync_Flash         
+		
+	State sync_Flash{
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,1) 				
+ 		delay 500	
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,0) 	
+ 		delay 500	
+	}
+	Goto sync_Flash
+}
+
+QActor firefly2 context ctxfirefly  {     
+ 
+	[#   
+	   var  X          = 5
+	   var  Y          = 5
+	   var Timer       = 500L 
+ 	#] 
+	State s0 initial{
+		[# Timer = java.util.Random().nextLong(1000L,2000L )  #]  
+		println("$name | X=$X Y=$Y  Timer=$Timer") color magenta	
+	}
+	Goto flash
+	State flash{
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,1) 				
+ 		delay 500 
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,0) 				
+	}
+	Transition t0 
+		whenTimeVar Timer -> flash
+		whenMsg sync -> sync_Flash         
+		
+	State sync_Flash{
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,1) 				
+ 		delay 500		
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,0) 
+ 		delay 500			
+	}
+	Goto sync_Flash
+}
+
+QActor firefly3 context ctxfirefly  {     
+ 
+	[#   
+	   var  X          = 2
+	   var  Y          = 2
+	   var Timer       = 500L 
+ 	#] 
+	State s0 initial{
+		[# Timer = java.util.Random().nextLong(1000L,2000L )  #]  
+		println("$name | X=$X Y=$Y  Timer=$Timer") color magenta	
+	}
+	Goto flash
+	State flash{
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,1) 				
+ 		delay 500	
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,0) 				
+	}
+	Transition t0 
+		whenTimeVar Timer -> flash
+		whenMsg sync -> sync_Flash         
+		
+	State sync_Flash{
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,1) 				
+ 		delay 500	
+ 		forward griddisplay -m  cellstate : cellstate($X,$Y,0) 
+ 		delay 500		
+	}
+	Goto sync_Flash
+}
