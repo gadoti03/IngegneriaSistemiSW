@@ -1,34 +1,30 @@
 /*
 wscontrol.js
 */
- 	var pageId         = "unknown";
-	var cmdMsgTemplate = "msg( eval, dispatch, SENDER, lifectrl, CMD, 0 )"
+ 	var pageId         = "";
+	var cmdMsgTemplate = "SENDER::CMD"
 	var opened         = false
 	var socketToGui;
 	
+	function generatePageId(){
+		pageId = ""+Math.floor(Math.random()*10000000);
+	}
+	
 	function sendCmdToServer(cmd) {
-		 //console.log("sendCmdToServer:" + cmd )
+		 console.log("sendCmdToServer:" + cmd )
 		 msg = cmdMsgTemplate.replace("CMD", cmd).replace("SENDER",pageId)
-		 //addItem("sendCmdToServer: " + msg + " opened=" + opened);
-		 console.log("sendCmdToServer:" + msg )		 
-		 //if( opened ) 
-			socketToGui.send(msg);
+		 //addItem("sendCmdToServer: " + msg + " opened=" + opened);		 
+		 if( opened ) socketToGui.send(msg);
 	}
 				
  function  initWS(){
  /*1*/	  
-      console.log("initWS | window.location.host=" + window.location.host );
-	  if( window.location.host =="" ){
-		 socketToGui = new WebSocket("ws://localhost:8080/chat");
-		 console.log("initWS | socketToGuiiii=" + socketToGui );
-		 //socketToGui.send("hello world su chat");
-	  }else{
-		socketToGui = new WebSocket("ws://"+window.location.host+"/eval");
-		//socketToGui.send("hello world su eval");
-	  } 
+ 	generatePageId();
+	  if( window.location.host =="" ) socketToGui = new WebSocket("ws://localhost:8080/chat");
+	  else 	socketToGui = new WebSocket("ws://"+window.location.host+"/chat");
 
  /*2*/socketToGui.onopen = () => {
-     console.log("initWS | Connesso a eval");
+     //console.log("initWS | Connesso a eval");
 	 addItem("initWS | Connesso a chat");
 	 opened = true;
 	 sendCmdToServer("ready" );
@@ -41,11 +37,15 @@ wscontrol.js
 			pageId= event.data.split(":")[1];
 			addItem( "page ID="  + pageId ); 
 		 }
-		 else if( event.data.startsWith("cell(")){ //deve ricevere da caller
+		 else if( event.data.startsWith("cell")){
 			 //addItem(event.data);
 			 coords = event.data.replace("cell(", "").replace(")","").split(",");
+			 console.log("cell "+coords[0]+","+coords[1]+","+coords[2]);
 			 //addItem(coords);
 			 updateCellColor(coords[0],coords[1],coords[2] )  //In iomap.js
+		 }else if( event.data.startsWith("running")){
+			startBtn.disabled = true;
+			stopBtn.disabled = false;
 		 }else{/*
 	         if( event.data == "PING") {
 				socketToGui.send("PONG");
@@ -61,6 +61,6 @@ wscontrol.js
  }//initWS
 
  //addItem("Welcome to conwaygui ....");  
-  initWS()
+ initWS()
    
  

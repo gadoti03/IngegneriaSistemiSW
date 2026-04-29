@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>conway26GuiHtml</name>
+	<name>conway26GuiAlone</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -17,12 +17,12 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
+		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1774345773907</id>
+			<id>1</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
