@@ -19,4 +19,6 @@
 
 [Index dello sprint1](https://gadoti03.github.io/IngegneriaSistemiSW/docs/sprint1.html)
 
+[Index dello sprint2](https://gadoti03.github.io/IngegneriaSistemiSW/docs/sprint2.html)
+
 [Index dello sprint3](https://gadoti03.github.io/IngegneriaSistemiSW/docs/sprint3.html)
