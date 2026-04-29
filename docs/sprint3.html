@@ -33,223 +33,95 @@
                 <section class="mb-4">
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Requirements</h2>
                     <div class="bg-body-tertiary border rounded p-3 mb-0">
-                        <ul>
-                            <li>R1: Sviluppare in Java il gioco Life di Conway come zero-player game.
-                                La griglia di celle evolve secondo le regole del gioco.</li>
-                            <li>R2: L'utente deve poter:
-                                <ul>
-                                    <li>definire la configurazione iniziale della griglia</li>
-                                    <li>osservare l'evoluzione del gioco
-                                        (<a href="https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf#section.6.3">
-                                            vista del gioco
-                                        </a>)</li>
-                                    <li>interrompere e riprendere l'evoluzione</li>
-                                    <li>resettare la griglia quando il gioco è fermo</li>
-                                </ul>
-                            </li>
-                        </ul>
+                    <ul>
+                        <li>R1: Il sistema Life deve disporre di una pagina HTML utilizzata come interfaccia per input e output.</li>
+
+                        <li>R2: La pagina HTML deve essere realizzata come componente esterno rispetto all’applicazione principale.</li>
+                        <li>R3: L’architettura deve seguire il modello descritto nella documentazione IoJavalin disponibile a 
+                            <a href="https://anatali.github.io/issLab2026/_static/docs/Protobook.pdf#subsection.8.2.2">questo link</a>.
+                        </li>
+
+                        <li>R4: Il sistema deve identificare il primo utente che accede alla pagina come owner del gioco.</li>
+                        <li>R5: Solo l’owner deve avere accesso ai comandi di controllo del gioco.</li>
+                        <li>R6: I comandi abilitati per l’owner sono START, STOP, CLEAN ed EXIT.</li>
+
+                        <li>R7: L’interfaccia deve aggiornarsi automaticamente durante l’esecuzione del gioco senza intervento manuale.</li>
+
+                        <li>R8: Gli utenti non owner che si collegano durante l’esecuzione devono vedere lo stato aggiornato della griglia.</li>
+                        <li>R9: La sincronizzazione della griglia deve garantire coerenza tra tutti i client connessi.</li>
+
+                        <li>R10: La pagina deve indicare chiaramente se il gioco continua anche in caso di griglia vuota.</li>
+                        <li>R11: La pagina deve segnalare anche la presenza di una configurazione stabile (assenza di evoluzione).</li>
+
+                        <li>R12: Il sistema deve essere distribuito ed eseguito tramite container Docker.</li>
+                    </ul>
                     </div>
                 </section>
 
                 <!-- Requirement Analysis -->
                 <section class="mb-4">
-                    <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Requirement analysis</h2>
-                    <div class="bg-body-tertiary border rounded p-3 mb-0">
+                     Riportiamo la architettura logica del sistema realizzato usando Java
+                    <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Problem analysis</h2>
+                    <img src="./img/requirement_analysis.jpeg" alt="Problem analysis" class="img-fluid border rounded">
+                    <p>
+                        L’introduzione di una pagina HTML modifica l’architettura del sistema, che diventa distribuito, poiché all’applicazione
+                        backend si affianca un client browser.
+                    </p>
 
-                        <h5 class="mt-2">Cosa si intende per <b>Cella</b>?</h5>
-                        <p>Dopo aver parlato col committente formalizzo il seguente modello:</p>
-                        <pre class="bg-light p-3 border rounded"><code>
-public interface ICell {
-    /* Una cella ha la capacità di impostare il proprio stato interno a seconda di un valore booleano */
-    void setStatus(boolean v);
+                    <p>
+                        Per i requisiti R4-R5 è necessario distinguere tra un utente <b>owner</b> e utenti <b>non owner</b>. L’interfaccia grafica
+                        deve contenere i pulsanti START, STOP, CLEAN ed EXIT, che risultano utilizzabili esclusivamente dall’owner.
+                    </p>
 
-    /* Una cella, come entità, ha la capacità di rispondere alla "query" isAlive rispondendo con il valore dello stato */
-    boolean isAlive();
+                    <p>
+                        La gestione dei comandi si basa sull’interfaccia <code>GameController</code> definita nello Sprint1. I pulsanti
+                        devono essere mappati sui seguenti dispatch verso la classe che implementa il controller:
+                    </p>
 
-    /* Una cella ha la capacità di cambiare il proprio stato da viva a morta e da morta a viva */
-    void switchCellState(); 
-}
-                        </code></pre>
+                    <ul>
+                        <li>START → onStart()</li>
+                        <li>STOP → onStop()</li>
+                        <li>CLEAN → onClear()</li>
+                    </ul>
 
-                        <h5 class="mt-3">Cosa si intende per <b>Griglia</b>?</h5>
-                        <p>Dopo aver parlato col committente formalizzo il seguente modello:</p>
-                        <pre class="bg-light p-3 border rounded"><code>
-public interface IGrid {
-    /* Una griglia ha la capacità di comunicare il numero delle righe che la compongono */
-    int getRows();
+                    <p>
+                        Il comando EXIT ha invece la funzione di terminare la connessione tra l’utente owner e il server.
+                    </p>
 
-    /* Una griglia ha la capacità di comunicare il numero delle colonne che la compongono */
-    int getCols();
-
-    /* Una griglia ha la capacità di restituire la cella in corrispondenza degli indici di riga e colonna passati come parametri */
-    ICell getCell(int row, int col);
-
-    /* Una griglia ha la capacità di rispondere alla query isCellAlive restituendo lo stato della cella corrispondente */
-    boolean isCellAlive(int row, int col);
-
-    /* Una griglia ha la capacità di impostare lo stato di una cella a seconda degli indici di riga e colonna passati come parametri e di un valore booleano */
-    void setCellState(int row, int col, boolean alive);
-
-    /* Una griglia ha la capacità di contare il numero di celle adiacenti vive rispetto alla cella specificata */
-    int countNeighbors(int row, int col);
-
-    /* Una griglia ha la capacità di resettarsi riportando tutte le celle allo stato iniziale */
-    void reset();
-}
-                        </code></pre>
-
-                        <h5 class="mt-3">Cosa si intende per <b>Life</b>?</h5>
-                        <p>Dopo aver parlato col committente formalizzo il seguente modello:</p>
-                        <pre class="bg-light p-3 border rounded"><code>
-public interface LifeInterface {
-    /* Life ha la capacità di calcolare il valore della sua griglia alla generazione successiva */
-    void nextGeneration();
-
-    /* Life ha la capacità di restituire lo stato di una cella a seconda degli indici di riga e colonna passati come parametri */
-    boolean isCellAlive(int row, int col);
-
-    /* Life ha la capacità di impostare lo stato di una cella a seconda degli indici di riga e colonna passati come parametri e di un valore booleano */
-    void setCellState(int row, int col, boolean alive);
-
-    /* Life ha la capacità di restituire la cella in corrispondenza degli indici di riga e colonna passati come parametri */
-    ICell getCell(int row, int col);
-
-    /* Life ha la capacità di restituire la griglia gestita dal modello */
-    IGrid getGrid();
-
-    /* Life ha la capacità di resettare la griglia riportando tutte le celle allo stato iniziale */
-    void resetGrids();
-}
-                        </code></pre>
-
-                    </div>
+                    <p>
+                        Per il requisito R4 viene implementata l’interfaccia <code>IOutDev</code> tramite la classe <code>IOController</code>,
+                        responsabile della propagazione verso la pagina HTML dello stato aggiornato del gioco.
+                    </p>
                 </section>
 
                 <!-- Problem analysis -->
                 <section class="mb-4">
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Problem analysis</h2>
                     <img src="./img/problem_analysis.jpeg" alt="Problem analysis" class="img-fluid border rounded">
+                    <p>
+                        La comunicazione tra browser e server avviene tramite WebSocket, in modo da supportare aggiornamenti in tempo reale
+                        come richiesto dal requisito R4. Alla connessione del client viene aperto un canale persistente tra pagina web e server.
+                    </p>
+
+                    <p>
+                        I messaggi scambiati seguono il formato <code>SENDER::COMMAND</code>. Questa struttura è stata scelta per facilitare
+                        l’elaborazione lato server e per separare chiaramente l’identità del mittente dal comando inviato.
+                    </p>
+
+                    <p>
+                        Il campo <code>SENDER</code> permette di distinguere l’utente owner dagli altri client, mentre <code>COMMAND</code>
+                        rappresenta l’azione richiesta dal browser.
+                    </p>
+
+                    <p>
+                        L’identificativo del mittente è rappresentato da un <code>pageId</code> generato direttamente lato client al momento
+                        dell’apertura della pagina.
+                    </p>
                 </section>
 
                 <!-- Test plans -->
                 <section class="mb-4">
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Test plans</h2>
-
-                    <div class="accordion" id="testPlansAccordion">
-
-                        <!-- Piano di test per Cella -->
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingCell">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#cellTest" aria-expanded="false" aria-controls="cellTest">
-                                    Piano di test per <b>Cella</b>
-                                </button>
-                            </h2>
-                            <div id="cellTest" class="accordion-collapse collapse" aria-labelledby="headingCell"
-                                data-bs-parent="#testPlansAccordion">
-                                <div class="accordion-body bg-body-tertiary p-2">
-<pre><code>
-public class CellTest {
-    private ICell c;
-
-    @Before
-    public void setup() {
-        c = new Cell();
-    }
-
-    @Test
-    public void testCellAlive() {
-        c.setStatus(true);
-        assertTrue(c.isAlive());
-    }
-
-    @Test
-    public void testCellDead() {
-        c.setStatus(false);
-        assertFalse(c.isAlive());
-    }
-}
-</code></pre>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Piano di test per Griglia -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingGrid">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#gridTest" aria-expanded="false" aria-controls="gridTest">
-                                Piano di test per <b>Griglia</b>
-                            </button>
-                        </h2>
-                        <div id="gridTest" class="accordion-collapse collapse" aria-labelledby="headingGrid"
-                            data-bs-parent="#testPlansAccordion">
-                            <div class="accordion-body bg-body-tertiary p-2">
-<pre><code>
-public class GridTest {
-    private IGrid grid;
-
-    @Before
-    public void setup() {
-        grid = new Grid(5, 5);
-    }
-
-    @Test
-    public void testDims() {
-        assertEquals(5, grid.getRows());
-        assertEquals(5, grid.getCols());
-    }
-
-    @Test
-    public void testCellValue() {
-        grid.setCellState(0, 0, true);
-        assertTrue(grid.isCellAlive(0, 0));
-    }
-}
-</code></pre>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Piano di test per Life -->
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingLife">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#lifeTest" aria-expanded="false" aria-controls="lifeTest">
-                                Piano di test per <b>Life</b>
-                            </button>
-                        </h2>
-                        <div id="lifeTest" class="accordion-collapse collapse" aria-labelledby="headingLife"
-                            data-bs-parent="#testPlansAccordion">
-                            <div class="accordion-body bg-body-tertiary p-2">
-<pre><code>
-public class LifeTest {
-    private LifeInterface lifeModel;
-
-    @Before
-    public void setup() {
-        lifeModel = new Life(5, 5);
-    }
-
-    @Test
-    public void testSetCellAlive() {
-        lifeModel.setCellState(2, 3, true);
-        assertTrue(lifeModel.isCellAlive(2, 3));
-    }
-
-    @Test
-    public void testReset() {
-        lifeModel.setCellState(2, 2, true);
-        lifeModel.resetGrids();
-        assertFalse(lifeModel.isCellAlive(2, 2));
-    }
-}
-</code></pre>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
                 </section>
 
                 <!-- Project / Testing / Deployment / Maintenance -->
