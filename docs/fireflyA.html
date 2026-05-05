@@ -41,99 +41,141 @@
                     </div>
                 </section>
 
-                <section class="mb-4">
-                    <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Requirement Analysis</h2>
-                    <div class="bg-body-tertiary border rounded p-3 mb-0">
+        <section class="mb-4">
+            <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Requirement Analysis</h2>
+            <div class="bg-body-tertiary border rounded p-3 mb-0">
 
-                        <ul>
-                            <li><b>Firefly (Lucciola):</b> entità attiva del sistema che rappresenta un componente autonomo.</li>
+                <ul>
+                    <li><b>Firefly (Lucciola):</b> entità attiva del sistema che rappresenta un componente autonomo.</li>
 
-                            <li><b>Sistema:</b> insieme composto da 3 istanze di Firefly.</li>
+                    <li><b>Sistema:</b> insieme composto da 3 istanze di Firefly.</li>
 
-                            <li><b>Tempo:</b> grandezza fisica che permette di esprimere vincoli temporali nel sistema.</li>
+                    <li><b>Tempo:</b> grandezza fisica che permette di esprimere vincoli temporali nel sistema.</li>
 
-                            <li><b>Frequenza (f):</b> numero di lampeggi per unità di tempo associato a ciascuna lucciola.</li>
+                    <li><b>Frequenza (f):</b> numero di lampeggi per unità di tempo associato a ciascuna lucciola.</li>
 
-                            <li><b>Periodo (T):</b> intervallo di tempo tra due lampeggi consecutivi (T = 1/f).</li>
+                    <li><b>Periodo (T):</b> intervallo di tempo tra due lampeggi consecutivi (T = 1/f).</li>
 
-                            <li><b>Lampeggio (Flash):</b> evento osservabile emesso da una lucciola.</li>
+                    <li><b>Lampeggio (Flash):</b> evento osservabile emesso da una lucciola.</li>
 
-                            <li><b>Sincronizzazione:</b> stato del sistema in cui più lucciole condividono lo stesso comportamento di lampeggio.</li>
+                    <li><b>Sincronizzazione:</b> stato del sistema in cui più lucciole condividono lo stesso comportamento di lampeggio.</li>
 
-                        </ul>
+                </ul>
 
-                    </div>
-                </section>
+            </div>
+        </section>
 
-                <section class="mb-4">
-                    <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Problem Analysis</h2>
-                    <div class="bg-body-tertiary border rounded p-3 mb-0">
+        <section class="mb-4">
+            <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Problem Analysis</h2>
+            <div class="bg-body-tertiary border rounded p-3 mb-0">
 
-                        <h3 class="h6">Composizione del sistema</h3>
-                        <ul>
-                            <li>Il sistema è composto da 3 lucciole</li>
-                            <li>Ogni lucciola è un attore concorrente (entità indipendente con stato proprio)</li>
-                            <li>Ogni attore evolve nel tempo in modo autonomo</li>
-                        </ul>
+                <h3 class="h6">Composizione del sistema</h3>
+                <ul>
+                    <li>Il sistema è composto da 3 lucciole</li>
+                    <li>Ogni lucciola è un attore concorrente (QActor), entità indipendente con stato proprio</li>
+                    <li>Ogni attore mantiene il proprio stato interno ed evolve autonomamente nel tempo</li>
+                    <li>È presente un attore aggiuntivo (<b>sync_actor</b>) che gestisce la sincronizzazione</li>
+                </ul>
 
-                        <h3 class="h6">Problema principale</h3>
-                        <ul>
-                            <li>Il problema centrale è la sincronizzazione tra le lucciole</li>
-                            <li>Inizialmente ogni lucciola ha una frequenza propria (comportamento asincrono)</li>
-                            <li>Entro 10 secondi il sistema deve raggiungere uno stato sincronizzato</li>
-                        </ul>
+                <h3 class="h6">Problema principale</h3>
+                <ul>
+                    <li>Il problema centrale è la sincronizzazione tra le lucciole</li>
+                    <li>Inizialmente ogni lucciola lampeggia con una frequenza propria</li>
+                    <li>Dopo 10 secondi tutte devono convergere su un comportamento sincronizzato</li>
+                </ul>
 
-                        <h3 class="h6">Aspetti critici</h3>
-                        <ul>
-                            <li><b>Gestione del tempo:</b> è necessario introdurre un meccanismo che consenta di rilevare lo scadere dei 10 secondi</li>
+                <h3 class="h6">Possibili strategie di soluzione</h3>
 
-                            <li><b>Allineamento di fase:</b> avere la stessa frequenza non garantisce sincronizzazione se i lampeggi avvengono in istanti diversi</li>
+                <h3 class="h6">1. Orchestratore che impone la frequenza</h3>
+                <ul>
+                    <li>Un componente centrale decide la frequenza finale</li>
+                    <li>Dopo 10 secondi comunica il valore a tutte le lucciole</li>
+                    <li><b>Discussione:</b> soluzione semplice e deterministica</li>
+                    <li><b>Limite:</b> introduce centralizzazione</li>
+                </ul>
 
-                            <li><b>Coordinamento tra attori:</b> le lucciole devono in qualche modo convergere verso un comportamento comune</li>
+                <h3 class="h6">2. Orchestratore con evento di sincronizzazione</h3>
+                <ul>
+                    <li>Un attore emette un messaggio/evento di sincronizzazione</li>
+                    <li>Le lucciole reagiscono allineando il proprio comportamento</li>
+                    <li><b>Discussione:</b> disaccoppiamento tra componenti</li>
+                    <li><b>Limite:</b> presenza di coordinatore centrale</li>
+                </ul>
 
-                            <li><b>Concorrenza:</b> le lucciole operano in parallelo, quindi la soluzione deve gestire interazioni asincrone</li>
-                        </ul>
+                <h3 class="h6">3. Variabile comune predefinita</h3>
+                <ul>
+                    <li>Tutte le lucciole conoscono una frequenza finale condivisa</li>
+                    <li>Dopo 10 secondi commutano autonomamente</li>
+                    <li><b>Discussione:</b> soluzione semplice</li>
+                    <li><b>Limite:</b> nessuna interazione reale</li>
+                </ul>
 
-                        <h3 class="h6">Possibili strategie di soluzione</h3>
+                <h3 class="h6">4. Approccio distribuito adattivo</h3>
+                <ul>
+                    <li>Le lucciole osservano il comportamento delle altre</li>
+                    <li>Adattano progressivamente la propria frequenza</li>
+                    <li><b>Discussione:</b> sistema auto-organizzato</li>
+                    <li><b>Limite:</b> non deterministico</li>
+                </ul>
 
-                        <h3 class="h6">1. Orchestratore centrale (imposizione frequenza)</h3>
-                        <ul>
-                            <li>Un componente centrale stabilisce la frequenza finale</li>
-                            <li>Dopo 10 secondi comunica il valore a tutte le lucciole</li>
-                            <li><b>Pro:</b> semplice e deterministico</li>
-                            <li><b>Contro:</b> introduce centralizzazione</li>
-                        </ul>
+                <div class="mt-3">
+                    <b>Scelta progettuale:</b> è stata adottata la strategia basata su orchestratore con evento di sincronizzazione,
+                    implementata tramite l’attore <code>sync_actor</code>.
+                </div>
 
-                        <h3 class="h6">2. Evento globale di sincronizzazione</h3>
-                        <ul>
-                            <li>Un evento broadcast segnala il momento di sincronizzazione</li>
-                            <li>Le lucciole reagiscono allineando immediatamente il proprio stato</li>
-                            <li><b>Pro:</b> disaccoppiamento tra componenti</li>
-                            <li><b>Contro:</b> richiede gestione degli eventi concorrenti</li>
-                        </ul>
+                <h3 class="h6 mt-3">Riferimento al codice</h3>
+                <div class="mb-2">
+                    <a href="https://github.com/gadoti03/IngegneriaSistemiSW/blob/main/firefly/src/firefly.qak" target="_blank">
+                        firefly.qak (implementazione completa)
+                    </a>
+                </div>
 
-                        <h3 class="h6">3. Variabile comune predefinita</h3>
-                        <ul>
-                            <li>Tutte le lucciole conoscono una frequenza finale condivisa</li>
-                            <li>Dopo 10 secondi commutano autonomamente</li>
-                            <li><b>Pro:</b> soluzione semplice</li>
-                            <li><b>Contro:</b> nessuna vera interazione tra componenti</li>
-                        </ul>
+                <h3 class="h6">Meccanismo di sincronizzazione</h3>
 
-                        <h3 class="h6">4. Approccio distribuito adattivo</h3>
-                        <ul>
-                            <li>Le lucciole osservano il comportamento delle altre</li>
-                            <li>Adattano progressivamente la propria frequenza</li>
-                            <li><b>Pro:</b> sistema auto-organizzato</li>
-                            <li><b>Contro:</b> non deterministico</li>
-                        </ul>
+                <pre class="bg-dark text-light p-3 rounded"><code>
+QActor sync_actor {
+    var Timer_sync = 10000L
 
-                        <div class="mt-3">
-                            Come primo prototipo si adotta la soluzione più semplice basata su variabile comune predefinita perche soluzione più semplice da implementare e testare. In seguito, si potranno esplorare soluzioni più complesse e dinamiche.
-                        </div>
+    Transition t0 
+        whenTimeVar Timer_sync -> send_sync
 
-                    </div>
-                </section>
+    State send_sync{
+        forward firefly1 -m sync : sync(1)
+        forward firefly2 -m sync : sync(1)
+        forward firefly3 -m sync : sync(1)
+    }
+}
+                </code></pre>
+
+                <div class="mb-3">
+                    L’attore <b>sync_actor</b> introduce un trigger temporale (10 secondi) e invia un messaggio di sincronizzazione alle lucciole.
+                </div>
+
+                <h3 class="h6">Reazione delle lucciole</h3>
+
+                <pre class="bg-dark text-light p-3 rounded"><code>
+Transition t0 
+    whenTimeVar Timer -> flash
+    whenMsg sync -> sync_Flash
+                </code></pre>
+
+                <div class="mb-3">
+                    Ogni lucciola intercetta il messaggio <code>sync</code> e passa allo stato <b>sync_Flash</b>, interrompendo il comportamento precedente e allineando la fase.
+                </div>
+
+                <h3 class="h6">Criticità affrontate</h3>
+                <ul>
+                    <li><b>Concorrenza:</b> le lucciole operano in parallelo come attori indipendenti</li>
+                    <li><b>Coordinamento:</b> ottenuto tramite messaggi espliciti</li>
+                    <li><b>Allineamento di fase:</b> la transizione immediata allo stato sincronizzato forza la simultaneità dei lampeggi</li>
+                </ul>
+
+                <div class="mt-3">
+                    La soluzione adottata è centralizzata e deterministica, basata su un trigger temporale e comunicazione tra attori.
+                </div>
+
+            </div>
+        </section>
 
                 <!-- Test plans -->
                 <section class="mb-4">
