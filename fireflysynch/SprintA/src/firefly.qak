@@ -36,9 +36,9 @@ QActor firefly context ctxfireflies dynamicOnly{
     
     State flash {
         println("$name | $Timer") color cyan
-        forward griddisplay -m cellstate: cellstate($X,$Y,1) //on
+        forward griddisplay -m cellstate: cellstate($X,$Y,1)
         delayVar Timer
-        forward griddisplay -m cellstate: cellstate($X,$Y,0) //off
+        forward griddisplay -m cellstate: cellstate($X,$Y,0)
     }
     
     Transition t0
