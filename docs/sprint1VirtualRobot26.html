@@ -24,7 +24,7 @@
                     <p class="mb-0">
                         Realizzazione in Java del
                         <a href="https://anatali.github.io/issLab2026/blob/main/docs/LectureBologna2026.html">
-                            Differential Drive Robot
+                            Virtual Robot 2026
                         </a>
                         limitatamente al all'analisi dei requisiti
                     </p>
@@ -34,24 +34,16 @@
                 <section class="mb-4">
                     <h2 class="h5 text-primary border rounded-pill px-3 py-2 bg-success-subtle">Requirements</h2>
                     <div class="bg-body-tertiary border rounded p-3 mb-0">
-                        <div>Costruire un sistema software che comanda un Differential Drive Robot (DDR) in modo che:</div>
-                        <ul>
-                            <li>
-                                partendo dalla posizione iniziale HOME, il robot si sposti lungo il perimetro di una stanza rettangolare vuota. 
-                            </li>
-                            <li>
-                                Il DDR si deve fermare quando tornato in HOME.
-                            </li>
-                        </ul>
-                        <div>Il DDR è anche sensibile ai dati rilevati da un Radar.</div>
-                        <div>Quando il Radar rileva un 'intruso' a una distanza minore di una distanza prefissata ``DMIN``:</div>
-                        <ul>
-                            <li>
-                                se il DDR si sta muovendo , il DDR si ferma fino a che il Radar non rileva più un 'intruso' così vicino 
-                            </li>
-                            <li>
-                                se il DDR è fermo in HOME, il DDR ruota su sè stesso fino a che un 'intruso' così vicino scompare
-                            </li>
+                    <div>Costruire un sistema software che comanda un Differential Drive Robot (DDR) in modo che, 
+                    partendo dalla posizione iniziale HOME, il robot si sposti lungo il perimetro di una stanza rettangolare vuota. 
+                    Il <b>DDR</b> si deve fermare quando tornato in HOME.</div>
+
+                    <div>Il <b>DDR</b> è anche sensibile ai dati rilevati da un Radar.</div>
+                    <div>Quando il Radar rileva un 'intruso' a una distanza minore di una distanza prefissata <b>DMIN</b>:</div>
+                    <ul>
+                        <li>se il <b>DDR</b> si sta muovendo , il <b>DDR</b> si ferma fino a che il Radar non rileva più un 'intruso' così vicino </li>
+                        <li>se il <b>DDR</b> è fermo in HOME, il <b>DDR</b> ruota su sè stesso fino a che un 'intruso' così vicino scompare</li>
+                    </ul>
                     </div>
                 </section>
 
@@ -61,19 +53,40 @@
                     <div class="bg-body-tertiary border rounded p-3 mb-0">
                     <div>L’analisi dei requisiti identifica le entità del dominio e le regole di interazione tra robot, sensore e ambiente.</div>
                     <ul>
-                        <li><b>DDR (Differential Drive Robot):</b> entità attiva che controlla il movimento differenziale delle ruote. Può eseguire movimenti lungo il perimetro, fermarsi e ruotare su sé stesso.</li>
+                        <li><b>Entità Robot</b>: Un Differential Drive Robot (DDR) modellato come risorsa esterna.</li>
+                        <li><b>Comandi (Output)</b>: Emissione di dispatch verso un adapter software che traduce le direzioni in segnali per i motori.</li>
+                        <li><b>Percezione (Input)</b>: Flusso asincrono di event generati da un sonar fisico/virtuale.</li>
+                        <li><b>Obiettivo</b>: Percorrere il perimetro di un'area rettangolare, partendo e tornando al punto <i>HOME</i>.</li>
+                    </ul>
+                    <div class="bg-body-tertiary border rounded p-3 mb-0"><code><pre>
+System ddrroom
 
-                        <li><b>Stanza rettangolare:</b> ambiente fisico delimitato che definisce il percorso del robot lungo il perimetro.</li>
+Event sonardata : sonar(D)
+Event obstacle : obstacle(D)
+Event free : free()
 
-                        <li><b>HOME:</b> posizione iniziale e finale del robot, usata come riferimento di completamento del ciclo di movimento.</li>
+Dispatch cmd : cmd(MOVE)
 
-                        <li><b>Radar:</b> sensore che rileva la presenza di intrusi e misura la distanza rispetto al robot.</li>
+Context ctxroom ip [host=ip port=port]
 
-                        <li><b>Intruso:</b> oggetto esterno rilevato dal radar che può interferire con il movimento del robot.</li>
+QActor robotcontroller context ctxroom {
+    State home initial {
+        // robot in HOME
+    }
 
-                        <li><b>DMIN:</b> parametro di soglia che definisce la distanza minima di sicurezza sotto la quale l’intruso è considerato critico.</li>
+    State moving {
+    // controllo del percorso lungo il perimetro
+    }
 
-                        <li><b>Stato del sistema:</b> insieme degli stati operativi del robot (MOVING, STOPPED, ROTATING).</li>
+    State stopped {
+    // arresto per presenza ostacolo
+    }
+
+    State rotating {
+    // rotazione sul posto
+    }
+} 
+                    </pre></code></div>
                     </ul>
                     </div>
                 </section>
