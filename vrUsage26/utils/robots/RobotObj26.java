@@ -114,7 +114,7 @@ public class RobotObj26  implements IRobotBasicMoves {
          		CommUtils.outred("robotObj26 | handleSonar " + jsonObj);
              long d = (long) jsonObj.get("distance") ;
              if( d < 0 ) d = -d;
-     		//CommUtils.outred("robotObj26 | handleSonarrrrrrrrrrr d=" + d);
+     		CommUtils.outred("robotObj26 | handleSonarrrrrrrrrrr d=" + d);
             IApplMessage sonarEvent = CommUtils.buildEvent( "vradpt","sonardata","sonar(" + d + ")");
             emitInfo(sonarEvent);
           }

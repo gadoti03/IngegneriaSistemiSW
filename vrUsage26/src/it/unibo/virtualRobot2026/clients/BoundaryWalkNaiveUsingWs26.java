@@ -54,40 +54,41 @@ public class BoundaryWalkNaiveUsingWs26 implements IObserver{
 //    /*
 //     * forwardlongcmd provoca sempre una collisione
 //     * turnleftcmd ha sempre successo (dopo 300 msec)
-//     */
-//    @OnMessage
-//    public void onMessage(String message)  {
-//        try {
-//            long duration = System.currentTimeMillis() - startTime;
-//            totalDuration += duration;
-//            CommUtils.outyellow("onMessage | message:" + message
-//                    + " duration=" + duration + " totalDuration=" + totalDuration);
-//            JSONObject jsonObj = (JSONObject) simpleparser.parse(message);
-//            //CommUtils.outblue("ClientNaiveUsingWs | jsonObj:" + jsonObj);
-//            if (jsonObj.get("endmove") != null ) {
-//                boolean endmove = jsonObj.get("endmove").toString().contains("true");
-//                String  move    = (String) jsonObj.get("move") ;
-//                //CommUtils.outyellow("onMessage | " + move + " endmove=" + endmove + " duration="+duration + " count=" + count);
-//                if( ! endmove ){ //forward failed since collisiom
-//                    count++;
-//                    callWS(  turnleftcmd  );//CommUtils.delay(350);
-//                }else //turnLeft completed
-//                if( count <= 4   ) callWS(  forwardlongcmd  );
-//            } else if (jsonObj.get("collision") != null ) {
-//                String move   = (String) jsonObj.get("collision");
-//                String target = (String) jsonObj.get("target");
-//                //CommUtils.outgreen("onMessage |  " + "collision move=" + move + " target=" + target + " duration="+duration + " count=" + count);
-//                halt(); //Forza l'emissione di {"endmove":"false","move":"moveForward-collision"}
-//            }
-//            /*else if (jsonObj.get("sonarName") != null ) { //JUST to show ...
-//                String sonarName = (String) jsonObj.get("sonarName") ;
-//                String distance  = jsonObj.get("distance").toString();
-//                CommUtils.outgreen("onMessage | JUST to show: sonarName=" + sonarName + " distance=" + distance);
-//            }*/
-//        } catch (Exception e) {
-//        	CommUtils.outred("onMessage " + message + " ERROR:" +e.getMessage());
-//        }
-//    }
+// 
+/*
+@OnMessage
+public void onMessage(String message)  {
+	try {
+		long duration = System.currentTimeMillis() - startTime;
+			totalDuration += duration;
+				CommUtils.outyellow("onMessage | message:" + message
+						+ " duration=" + duration + " totalDuration=" + totalDuration);
+			JSONObject jsonObj = (JSONObject) simpleparser.parse(message);
+			//CommUtils.outblue("ClientNaiveUsingWs | jsonObj:" + jsonObj);
+			if (jsonObj.get("endmove") != null ) {
+				boolean endmove = jsonObj.get("endmove").toString().contains("true");
+				String  move    = (String) jsonObj.get("move") ;
+				//CommUtils.outyellow("onMessage | " + move + " endmove=" + endmove + " duration="+duration + " count=" + count);
+				if( ! endmove ){ //forward failed since collisiom
+					count++;
+					callWS(  turnleftcmd  );//CommUtils.delay(350);
+				}else //turnLeft completed
+					if( count <= 4   ) callWS(  forwardlongcmd  );
+			} else if (jsonObj.get("collision") != null ) {
+				String move   = (String) jsonObj.get("collision");
+				String target = (String) jsonObj.get("target");
+				//CommUtils.outgreen("onMessage |  " + "collision move=" + move + " target=" + target + " duration="+duration + " count=" + count);
+				halt(); //Forza l'emissione di {"endmove":"false","move":"moveForward-collision"}
+			}
+			/*else if (jsonObj.get("sonarName") != null ) { //JUST to show ...
+			String sonarName = (String) jsonObj.get("sonarName") ;
+			String distance  = jsonObj.get("distance").toString();
+			CommUtils.outgreen("onMessage | JUST to show: sonarName=" + sonarName + " distance=" + distance);
+			}*//*
+	} catch (Exception e) {
+		CommUtils.outred("onMessage " + message + " ERROR:" +e.getMessage());
+	}
+}*/
 
     protected void doJob(String message) {
 	   try {
